@@ -11,10 +11,8 @@
 			font-weight:bold;
 		}
 	</style>
-
 </head>
 <body onload="time()">
-	
 	<h1></h1>
 </body>
 <script>
@@ -39,8 +37,81 @@
         var time=h+":"+m+":"+s+" "+session;
         document.getElementsByTagName("h1")[0].innerText=time;
         setTimeout(time,1000);
-
     }
 </script>
 
+<!-- ADDITIONAL FEATURES BEGIN HERE -->
+<style>
+  body {
+    text-align: center;
+    background-color: white;
+    transition: background-color 0.5s, color 0.5s;
+  }
+  #date {
+    font-size: 30px;
+    font-family: Arial;
+    margin-top: -50px;
+    color: #555;
+  }
+  #controls {
+    margin-top: 20px;
+  }
+  button {
+    font-size: 16px;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+  }
+</style>
+
+<p id="date"></p>
+<div id="controls">
+  <button onclick="toggleFormat()">Toggle 12/24 Hour</button>
+  <button onclick="toggleTheme()">Toggle Dark Mode</button>
+</div>
+
+<script>
+  let is24Hour = false;
+  let isDark = false;
+
+  function updateExtras() {
+    const now = new Date();
+    const dateString = now.toDateString();
+    document.getElementById('date').innerText = dateString;
+
+    const h1 = document.getElementsByTagName("h1")[0];
+    let hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+    let session = "AM";
+
+    if (!is24Hour) {
+      if (hours >= 12) session = "PM";
+      if (hours > 12) hours -= 12;
+      if (hours === 0) hours = 12;
+    }
+
+    const timeString = 
+      (hours < 10 ? "0" + hours : hours) + ":" +
+      (minutes < 10 ? "0" + minutes : minutes) + ":" +
+      (seconds < 10 ? "0" + seconds : seconds) + 
+      (is24Hour ? "" : " " + session);
+
+    h1.innerText = timeString;
+  }
+
+  function toggleFormat() {
+    is24Hour = !is24Hour;
+  }
+
+  function toggleTheme() {
+    isDark = !isDark;
+    document.body.style.backgroundColor = isDark ? "#111" : "white";
+    document.body.style.color = isDark ? "#eee" : "#000";
+    document.getElementById("date").style.color = isDark ? "#ccc" : "#555";
+  }
+
+  setInterval(updateExtras, 1000);
+</script>
+<!-- ADDITIONAL FEATURES END -->
 </html>
